@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="life.bienao.springbootinit.mapper.SystemMapper">
+
+    <resultMap id="BaseResultMap" type="life.bienao.springbootinit.entity.System" >
+        <id column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="value" property="value" />
+        <result column="description" property="description" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        code,
+                value,
+                description,
+                create_time,
+                update_time
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="life.bienao.springbootinit.entity.System">
+        INSERT INTO system
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != code and '' != code">
+                code,
+            </if>
+            <if test="null != value and '' != value">
+                value,
+            </if>
+            <if test="null != description and '' != description">
+                description,
+            </if>
+            <if test="null != createTime">
+                create_time,
+            </if>
+            <if test="null != updateTime">
+                update_time
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="null != code and '' != code">
+                #{code},
+            </if>
+            <if test="null != value and '' != value">
+                #{value},
+            </if>
+            <if test="null != description and '' != description">
+                #{description},
+            </if>
+            <if test="null != createTime">
+                #{createTime},
+            </if>
+            <if test="null != updateTime">
+                #{updateTime}
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete" >
+        DELETE FROM system
+        WHERE id = #{id}
+    </delete>
+
+    <update id="update" parameterType="life.bienao.springbootinit.entity.System">
+        UPDATE system
+        <set>
+            <if test="null != code and '' != code">code = #{code},</if>
+            <if test="null != value and '' != value">value = #{value},</if>
+            <if test="null != description and '' != description">description = #{description},</if>
+            <if test="null != createTime">create_time = #{createTime},</if>
+            update_time = CURRENT_TIMESTAMP
+        </set>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="load" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM system
+        WHERE id = #{id}
+    </select>
+
+    <select id="loadAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM system
+        order by id
+    </select>
+
+</mapper>
