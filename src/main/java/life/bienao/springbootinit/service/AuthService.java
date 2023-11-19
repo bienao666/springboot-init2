@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import life.bienao.springbootinit.entity.LoginBody;
 import life.bienao.springbootinit.entity.SysUser;
 
+import java.util.Map;
+
 public interface AuthService {
 
     JSONObject login(SysUser user);
@@ -15,5 +17,7 @@ public interface AuthService {
      * @param loginBody 用户主体
      * @return
      */
-    void registerUser(LoginBody loginBody);
+    void registerUser(SysUser user);
+
+    public Map getInfo();
 }

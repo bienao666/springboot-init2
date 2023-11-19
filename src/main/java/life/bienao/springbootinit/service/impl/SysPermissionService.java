@@ -1,8 +1,8 @@
 package life.bienao.springbootinit.service.impl;
 
 import life.bienao.springbootinit.entity.SysUser;
-import life.bienao.springbootinit.service.ISysMenuService;
-import life.bienao.springbootinit.service.ISysRoleService;
+import life.bienao.springbootinit.service.SysMenuService;
+import life.bienao.springbootinit.service.SysRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +20,10 @@ import java.util.Set;
 public class SysPermissionService
 {
     @Autowired
-    private ISysRoleService roleService;
+    private SysRoleService roleService;
 
     @Autowired
-    private ISysMenuService menuService;
+    private SysMenuService menuService;
 
     /**
      * 获取角色数据权限

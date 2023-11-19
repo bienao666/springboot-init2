@@ -18,13 +18,12 @@
         <result property="delFlag"    column="del_flag"    />
         <result property="loginIp"    column="login_ip"    />
         <result property="loginDate"    column="login_date"    />
-<!--        <result property="createBy"    column="create_by"    />-->
+        <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="remark"    column="remark"    />
         <result property="realName"    column="real_name"    />
-        <result property="description"    column="description"    />
         <result property="perImg"    column="per_img"    />
         <collection  property="roles"   javaType="java.util.List"        resultMap="RoleResult" />
     </resultMap>
@@ -48,7 +47,7 @@
                t.avatar, t.phonenumber, t.password, t.sex,
                t.status, t.del_flag, t.login_ip, t.login_date,
                t.create_by, t.create_time, t.remark,
-               t.real_name, t.description, t.per_img,
+               t.real_name, t.per_img,
                t1.role_id, t2.role_name, t2.role_key, t2.role_sort, t2.data_scope, t2.status as role_status
         from sys_user t
                  left join sys_user_role t1 on t.user_id = t1.user_id
@@ -71,49 +70,43 @@
     </select>
 
     <insert id="insertUser" useGeneratedKeys="true" keyColumn="user_id" keyProperty="userId" parameterType="life.bienao.springbootinit.entity.SysUser">
-        insert into sys_user
-        <trim prefix="(" suffix=")" suffixOverrides=",">
+        insert into sys_user (
             <if test="userName != null and userName != ''">user_name,</if>
             <if test="nickName != null and nickName != ''">nick_name,</if>
-            <if test="userType != null">user_type,</if>
-            <if test="email != null">email,</if>
-            <if test="phonenumber != null">phonenumber,</if>
-            <if test="sex != null">sex,</if>
-            <if test="avatar != null">avatar,</if>
-            <if test="password != null">password,</if>
-            <if test="status != null">status,</if>
-            <if test="delFlag != null">del_flag,</if>
-            <if test="loginIp != null">login_ip,</if>
-            <if test="loginDate != null">login_date,</if>
-            <if test="createBy != null">create_by,</if>
-            <if test="updateBy != null">update_by,</if>
-            <if test="remark != null">remark,</if>
-            <if test="realName != null">real_name,</if>
-            <if test="description != null">description,</if>
-            <if test="perImg != null">per_img,</if>
+            <if test="userType != null and userType != ''">user_type,</if>
+            <if test="email != null and email != ''">email,</if>
+            <if test="phonenumber != null and phonenumber != ''">phonenumber,</if>
+            <if test="sex != null and sex != ''">sex,</if>
+            <if test="avatar != null and avatar != ''">avatar,</if>
+            <if test="password != null and password != ''">password,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="delFlag != null and delFlag != ''">del_flag,</if>
+            <if test="loginIp != null and loginIp != ''">login_ip,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="remark != null and remark != ''">remark,</if>
+            <if test="realName != null and realName != ''">real_name,</if>
+            <if test="perImg != null and perImg != ''">per_img,</if>
             create_time
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        )values(
             <if test="userName != null and userName != ''">#{userName},</if>
             <if test="nickName != null and nickName != ''">#{nickName},</if>
-            <if test="userType != null">#{userType},</if>
-            <if test="email != null">#{email},</if>
-            <if test="phonenumber != null">#{phonenumber},</if>
-            <if test="sex != null">#{sex},</if>
-            <if test="avatar != null">#{avatar},</if>
-            <if test="password != null">#{password},</if>
-            <if test="status != null">#{status},</if>
-            <if test="delFlag != null">#{delFlag},</if>
-            <if test="loginIp != null">#{loginIp},</if>
-            <if test="loginDate != null">#{loginDate},</if>
-            <if test="createBy != null">#{createBy},</if>
-            <if test="updateBy != null">#{updateBy},</if>
-            <if test="remark != null">#{remark},</if>
-            <if test="realName != null">#{realName},</if>
-            <if test="description != null">#{description},</if>
-            <if test="perImg != null">#{perImg},</if>
-        </trim>
-        CURRENT_TIMESTAMP
+            <if test="userType != null and userType != ''">#{userType},</if>
+            <if test="email != null and email != ''">#{email},</if>
+            <if test="phonenumber != null and phonenumber != ''">#{phonenumber},</if>
+            <if test="sex != null and sex != ''">#{sex},</if>
+            <if test="avatar != null and avatar != ''">#{avatar},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+            <if test="loginIp != null and loginIp != ''">#{loginIp},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="realName != null and realName != ''">#{realName},</if>
+            <if test="perImg != null and perImg != ''">#{perImg},</if>
+            CURRENT_TIMESTAMP
+            )
     </insert>
 
     <select id="getLastInsertId" resultType="java.lang.Long">
@@ -125,12 +118,15 @@
         from sys_user u
         left join sys_user_role ur on u.user_id = ur.user_id
         left join sys_role r on r.role_id = ur.role_id
-        where u.del_flag = '0' and r.role_id = #{roleId}
+        where u.del_flag = '0'
+        <if test="roleId != null">
+            AND r.role_id = #{roleId}
+        </if>
         <if test="userName != null and userName != ''">
-            AND u.user_name like concat('%', #{userName}, '%')
+            AND u.user_name like ('%'||#{userName}||'%')
         </if>
         <if test="phonenumber != null and phonenumber != ''">
-            AND u.phonenumber like concat('%', #{phonenumber}, '%')
+            AND u.phonenumber like ('%'||#{phonenumber}||'%')
         </if>
     </select>
 
@@ -139,40 +135,39 @@
         from sys_user u
         left join sys_user_role ur on u.user_id = ur.user_id
         left join sys_role r on r.role_id = ur.role_id
-        where u.del_flag = '0' and (r.role_id != #{roleId} or r.role_id IS NULL)
-        and u.user_id not in (select u.user_id from sys_user u inner join sys_user_role ur on u.user_id = ur.user_id and ur.role_id = #{roleId})
+        where u.del_flag = '0'
+        and u.user_id not in (select u.user_id from sys_user u inner join sys_user_role ur on u.user_id = ur.user_id)
         <if test="userName != null and userName != ''">
-            AND u.user_name like concat('%', #{userName}, '%')
+            AND u.user_name like ('%'||#{userName}||'%')
         </if>
         <if test="phonenumber != null and phonenumber != ''">
-            AND u.phonenumber like concat('%', #{phonenumber}, '%')
+            AND u.phonenumber like ('%'||#{phonenumber}||'%')
         </if>
         and (r.role_id != 1 or r.role_id is null) -- 排除掉管理员情况
     </select>
 
     <update id="updateSysUser" parameterType="life.bienao.springbootinit.entity.SysUser">
         update sys_user
-        <trim prefix="SET" suffixOverrides=",">
+        <set>
             <if test="userName != null and userName != ''">user_name = #{userName},</if>
             <if test="nickName != null and nickName != ''">nick_name = #{nickName},</if>
-            <if test="userType != null">user_type = #{userType},</if>
-            <if test="email != null">email = #{email},</if>
-            <if test="phonenumber != null">phonenumber = #{phonenumber},</if>
-            <if test="sex != null">sex = #{sex},</if>
-            <if test="avatar != null">avatar = #{avatar},</if>
-            <if test="password != null">password = #{password},</if>
-            <if test="status != null">status = #{status},</if>
-            <if test="delFlag != null">del_flag = #{delFlag},</if>
-            <if test="loginIp != null">login_ip = #{loginIp},</if>
-            <if test="loginDate != null">login_date = #{loginDate},</if>
-            <if test="createBy != null">create_by = #{createBy},</if>
-            <if test="updateBy != null">update_by = #{updateBy},</if>
-            <if test="remark != null">remark = #{remark},</if>
-            <if test="realName != null">real_name = #{realName},</if>
-            <if test="description != null">description = #{description},</if>
-            <if test="perImg != null">per_img = #{perImg},</if>
-        </trim>
-        update_time = CURRENT_TIMESTAMP
+            <if test="userType != null and userType != ''">user_type = #{userType},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="phonenumber != null and phonenumber != ''">phonenumber = #{phonenumber},</if>
+            <if test="sex != null and sex != ''">sex = #{sex},</if>
+            <if test="avatar != null and avatar != ''">avatar = #{avatar},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="delFlag != null and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="loginIp != null and loginIp != ''">login_ip = #{loginIp},</if>
+            <if test="loginDate != null and loginDate != ''">login_date = #{loginDate},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="realName != null and realName != ''">real_name = #{realName},</if>
+            <if test="perImg != null and perImg != ''">per_img = #{perImg},</if>
+            update_time = CURRENT_TIMESTAMP
+        </set>
         where user_id = #{userId}
     </update>
 
@@ -181,6 +176,108 @@
         delete from sys_user
         where status = 1 and user_id = #{userId}
     </delete>
+
+    <!--  -->
+    <resultMap type="life.bienao.springbootinit.entity.ShowUserVo" id="ShowUserVoResult">
+        <result property="realName"    column="real_name"    />
+        <result property="gradeNum"    column="grade_num"    />
+        <result property="majorName"    column="major_name"    />
+        <result property="roleName"    column="role_name"    />
+        <result property="perImg"    column="per_img"    />
+        <result property="description"    column="description"    />
+    </resultMap>
+
+    <!--  查询用户的基本信息：真实姓名、图片、角色名、年级、专业名  -->
+    <sql id="selectShowUserVo">
+        SELECT
+            t.real_name, t.description, t.per_img,
+            GROUP_CONCAT( t2.role_name ) AS role_name
+        from sys_user t
+                 left join sys_user_role t1 on t1.user_id = t.user_id
+                 LEFT JOIN sys_role t2 on t2.role_id = t1.role_id   -- 左联角色表取得角色名称
+    </sql>
+
+    <select id="selectShowUserVoList" resultMap="ShowUserVoResult">
+        <include refid="selectShowUserVo"/>
+        WHERE t.user_id != 1 and t.status = 0
+        GROUP BY
+        t.user_id
+        order by t3.grade_num desc
+    </select>
+
+    <select id="selectRaceUsersByRaceId" resultMap="ShowUserVoResult">
+        <include refid="selectShowUserVo"/>
+        WHERE FIND_IN_SET(t.user_id, (SELECT race_members FROM `zf_race` r WHERE r.race_id = #{raceId}))
+        GROUP BY
+        t.user_id
+        order by t3.grade_num desc
+    </select>
+
+
+    <sql id="selectSysUserVo">
+        SELECT
+            t.user_id, t.user_name, t.real_name, t.phonenumber, t.sex, t.email, t.status, t.create_time,
+            GROUP_CONCAT( t2.role_name ) AS role_name
+        from sys_user t
+                 left join sys_user_role t1 on t1.user_id = t.user_id
+                 LEFT JOIN sys_role t2 on t2.role_id = t1.role_id   -- 左联角色表取得角色名称
+    </sql>
+
+    <select id="selectSysUserList" parameterType="life.bienao.springbootinit.entity.MUserVo" resultMap="SysUserResult">
+        <include refid="selectSysUserVo"/>
+        <where>
+            -- 忽略管理员账户
+            t.user_id != 1
+            <if test="sex != null  and sex != ''"> and t.sex = #{sex}</if>
+            <if test="status != null  and status != ''"> and t.status = #{status}</if>
+            <if test="phonenumber != null  and phonenumber != ''"> and t.phonenumber = #{phonenumber}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != '' and params.endCreateTime != null and params.endCreateTime != ''"> and t.create_time between #{params.beginCreateTime} and #{params.endCreateTime}</if>
+            <if test="userName != null  and userName != ''"> and t.user_name like ('%'||#{userName}||'%')</if>
+        </where>
+        GROUP BY
+        t.user_id
+        order by t.create_time desc
+    </select>
+
+    <select id="selectSysUserIdAndRealName" resultMap="SysUserResult">
+        SELECT
+            user_id, real_name
+        from sys_user
+    </select>
+
+    <select id="selectSysUserByUserIds" resultMap="SysUserResult">
+        SELECT
+        t.user_id,t.real_name
+        FROM
+        sys_user t
+        WHERE t.user_id in
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </select>
+
+
+    <select id="selectSysUserByUserId" parameterType="Long" resultMap="SysUserResult">
+        SELECT
+            *
+        from sys_user
+        where user_id = #{userId}
+    </select>
+
+    <update id="updateStatusByUserId">
+        update sys_user
+        set status = #{status}
+        where user_id = #{userId}
+    </update>
+
+    <update id="resetPwdByUserId">
+        update sys_user
+        set password = #{password}
+        where user_id in
+        <foreach item="userId" collection="targetUserIds" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </update>
 
 
 

@@ -3,7 +3,7 @@ package life.bienao.springbootinit.controller;
 import life.bienao.springbootinit.constant.Constants;
 import life.bienao.springbootinit.entity.SysMenu;
 import life.bienao.springbootinit.entity.TreeSelect;
-import life.bienao.springbootinit.service.ISysMenuService;
+import life.bienao.springbootinit.service.SysMenuService;
 import life.bienao.springbootinit.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @ClassName SysMenuController
+ * 系统菜单
  * @Author bienao
  * @Date 4/10/2022 10:40 PM
  * @Description 系统菜单控制器
@@ -25,7 +25,7 @@ import java.util.Map;
 public class SysMenuController {
 
     @Autowired
-    private ISysMenuService menuService;
+    private SysMenuService menuService;
 
     /**
      * 获取菜单列表

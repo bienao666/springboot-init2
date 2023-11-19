@@ -20,26 +20,11 @@ public class LoginBody implements Serializable {
     /**
      * 用户名
      */
-    private String username;
+    private String userName;
 
     /**
      * 密码
      */
-    private String password;
-
-    /**
-     * 验证码
-     */
-    private String code;
-
-    /**
-     * 唯一标识
-     */
-    private String uuid;
-
-    /**
-     * 邀请码
-     */
-    private String invitationCode;
+    private String passWord;
 
 }

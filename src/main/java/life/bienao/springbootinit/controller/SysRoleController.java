@@ -7,8 +7,8 @@ import life.bienao.springbootinit.entity.SysUser;
 import life.bienao.springbootinit.entity.SysUserRole;
 import life.bienao.springbootinit.entity.page.CommonPage;
 import life.bienao.springbootinit.entity.page.PageUtils;
-import life.bienao.springbootinit.service.ISysRoleService;
-import life.bienao.springbootinit.service.ISysUserService;
+import life.bienao.springbootinit.service.SysRoleService;
+import life.bienao.springbootinit.service.SysUserService;
 import life.bienao.springbootinit.util.SecurityUtils;
 import life.bienao.springbootinit.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * @ClassName SysRoleController
+ * 系统角色
  * @Author bienao
  * @Date 4/10/2022 10:04 PM
  * @Description 系统角色控制器
@@ -29,31 +29,22 @@ import java.util.List;
 public class SysRoleController {
 
     @Autowired
-    private ISysRoleService roleService;
+    private SysRoleService roleService;
 
     @Autowired
-    private ISysUserService sysUserService;
-
-
-    @GetMapping("/list")
-    @PreAuthorize("@ss.hasPerm('role:list')")
-    public List<SysRole> list(SysRole role) {
-        return roleService.selectRoleList(role);
-    }
+    private SysUserService sysUserService;
 
     /**
-     * 状态修改
+     * 分页查询角色数据
+     * @param role
+     * @return
      */
-    @PutMapping("/changeStatus")
-    @PreAuthorize("@ss.hasPerm('role:changeStatus')")
-    public void changeStatus(@RequestBody SysRole role) {
-        roleService.checkRoleAllowed(role);
-        roleService.checkRoleDataScope(role.getRoleId());
-        String username = SecurityUtils.getLoginUser().getUsername();
-        role.setUpdateBy(username);
-        if (roleService.updateRoleStatus(role) < 0) {
-            throw new RuntimeException("修改失败");
-        }
+    @GetMapping("/list")
+    @PreAuthorize("@ss.hasPerm('role:list')")
+    public CommonPage list(SysRole role) {
+        PageUtils.startPage();
+        List<SysRole> sysRoles = roleService.selectRoleList(role);
+        return CommonPage.restPage(sysRoles);
     }
 
     /**
@@ -79,11 +70,12 @@ public class SysRoleController {
         }
         String username = SecurityUtils.getLoginUser().getUsername();
         role.setCreateBy(username);
+        role.setUpdateBy(username);
         roleService.insertRole(role);
     }
 
     /**
-     * 修改保存角色
+     * 修改角色
      */
     @PutMapping
     @PreAuthorize("@ss.hasPerm('role:edit')")
@@ -124,8 +116,8 @@ public class SysRoleController {
     /**
      * 查询已分配用户角色列表
      */
-    @GetMapping("/authUser/allocatedList")
-    @PreAuthorize("@ss.hasPerm('role:authUser:allocatedList')")
+    @GetMapping("/allocatedList")
+    @PreAuthorize("@ss.hasPerm('role:allocatedList')")
     public CommonPage allocatedList(SysUser user){
         PageUtils.startPage();
         List<SysUser> list = sysUserService.selectAllocatedList(user);
@@ -135,8 +127,8 @@ public class SysRoleController {
     /**
      * 查询未分配用户角色列表
      */
-    @GetMapping("/authUser/unallocatedList")
-    @PreAuthorize("@ss.hasPerm('role:authUser:unallocatedList')")
+    @GetMapping("/unallocatedList")
+    @PreAuthorize("@ss.hasPerm('role:unallocatedList')")
     public CommonPage unallocatedList(SysUser user) {
         PageUtils.startPage();
         List<SysUser> list = sysUserService.selectUnallocatedList(user);
@@ -146,8 +138,8 @@ public class SysRoleController {
     /**
      * 取消授权用户
      */
-    @PutMapping("/authUser/cancel")
-    @PreAuthorize("@ss.hasPerm('role:authUser:cancel')")
+    @PutMapping("/cancel")
+    @PreAuthorize("@ss.hasPerm('role:cancel')")
     public void cancelAuthUser(@RequestBody SysUserRole userRole) {
         roleService.deleteAuthUser(userRole);
     }
@@ -155,8 +147,8 @@ public class SysRoleController {
     /**
      * 批量选择用户授权
      */
-    @PutMapping("/authUser/selectAll")
-    @PreAuthorize("@ss.hasPerm('role:authUser:selectAll')")
+    @PutMapping("/selectAll")
+    @PreAuthorize("@ss.hasPerm('role:selectAll')")
     public void selectAuthUserAll(Long roleId, Long[] userIds) {
         roleService.checkRoleDataScope(roleId);
         roleService.insertAuthUsers(roleId, userIds);
@@ -165,8 +157,8 @@ public class SysRoleController {
     /**
      * 批量取消授权用户
      */
-    @PutMapping("/authUser/cancelAll")
-    @PreAuthorize("@ss.hasPerm('role:authUser:cancelAll')")
+    @PutMapping("/cancelAll")
+    @PreAuthorize("@ss.hasPerm('role:cancelAll')")
     public void cancelAuthUserAll(Long roleId, Long[] userIds) {
         roleService.deleteAuthUsers(roleId, userIds);
     }

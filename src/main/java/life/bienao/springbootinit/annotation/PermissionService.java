@@ -1,4 +1,4 @@
-package life.bienao.springbootinit.service.security;
+package life.bienao.springbootinit.annotation;
 
 import life.bienao.springbootinit.constant.Constants;
 import life.bienao.springbootinit.entity.SysRole;

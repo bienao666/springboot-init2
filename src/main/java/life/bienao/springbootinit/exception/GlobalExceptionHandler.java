@@ -93,7 +93,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Result illegalArgumentException(IllegalArgumentException e) {
         log.error(e.getMessage(), e);
-        return Result.error(401,"Token非法参数异常");
+        return Result.error(401,"非法参数异常");
     }
 
     @ExceptionHandler(value = AccessDeniedException.class)

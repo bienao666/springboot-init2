@@ -1,4 +1,4 @@
-package life.bienao.springbootinit.service.security;
+package life.bienao.springbootinit.service.impl;
 
 import life.bienao.springbootinit.entity.LoginUser;
 import life.bienao.springbootinit.entity.SysUser;

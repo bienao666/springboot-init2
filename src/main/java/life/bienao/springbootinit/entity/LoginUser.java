@@ -52,8 +52,8 @@ public class LoginUser implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         authorities = new HashSet<>();
-        permissions.stream().forEach((roleName)->{
-            authorities.add(new SimpleGrantedAuthority(roleName));
+        permissions.stream().forEach((permission)->{
+            authorities.add(new SimpleGrantedAuthority(permission));
         });
         return authorities;
     }

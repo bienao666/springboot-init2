@@ -30,7 +30,7 @@ CREATE TABLE `sys_role`  (
                              `role_sort` INTEGER NOT NULL,
                              `data_scope` varchar(1) NULL DEFAULT '1',
                              `menu_check_strictly` INTEGER NULL DEFAULT 1,
-                             `status` varchar(1) NOT NULL,
+                             `status` varchar(1) NULL DEFAULT '0',
                              `del_flag` varchar(1) NULL DEFAULT '0',
                              `create_by` varchar(64) NULL DEFAULT '',
                              `create_time` varchar(255) DEFAULT (datetime('now', 'localtime')),

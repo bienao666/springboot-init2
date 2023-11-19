@@ -39,7 +39,8 @@
           AND r.`status` = 0
           AND m.`status` = 0
 --        避免perms查到空(因为menu表中type为m是菜单，它们的perms为空)
-          AND !ISNULL(m.perms) and m.perms!=''
+          AND m.perms not null
+          AND m.perms!=''
     </select>
 
     <!--  查询管理员所有权限  -->
@@ -61,7 +62,7 @@
         <include refid="selectMenuVo"/>
         <where>
             <if test="menuName != null and menuName != ''">
-                AND menu_name like concat('%', #{menuName}, '%')
+                AND menu_name like ('%'||#{menuName}||'%')
             </if>
             <if test="visible != null and visible != ''">
                 AND visible = #{visible}
@@ -87,7 +88,7 @@
         left join sys_role ro on ur.role_id = ro.role_id
         where ur.user_id = #{params.userId}
         <if test="menuName != null and menuName != ''">
-            AND m.menu_name like concat('%', #{menuName}, '%')
+            AND m.menu_name like ('%'||#{menuName}||'%')
         </if>
         <if test="visible != null and visible != ''">
             AND m.visible = #{visible}

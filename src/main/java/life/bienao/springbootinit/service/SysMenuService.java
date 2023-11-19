@@ -13,7 +13,7 @@ import java.util.Set;
  *
  * @author ruoyi
  */
-public interface ISysMenuService
+public interface SysMenuService
 {
     /**
      * 根据用户查询系统菜单列表

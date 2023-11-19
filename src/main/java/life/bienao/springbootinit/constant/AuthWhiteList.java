@@ -10,6 +10,7 @@ public class AuthWhiteList {
      */
     public static final String[] AUTH_WHITELIST = {
             // -- register url
+            "/member/addUser",
             "/auth/login",
             "/init/**",
             "/assets/**",

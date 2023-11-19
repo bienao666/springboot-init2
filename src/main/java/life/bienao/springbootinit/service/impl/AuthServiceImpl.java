@@ -2,13 +2,11 @@ package life.bienao.springbootinit.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import life.bienao.springbootinit.constant.Redis;
-import life.bienao.springbootinit.entity.LoginBody;
-import life.bienao.springbootinit.entity.LoginUser;
-import life.bienao.springbootinit.entity.SysUser;
-import life.bienao.springbootinit.entity.SysUserRole;
+import life.bienao.springbootinit.entity.*;
 import life.bienao.springbootinit.mapper.SysUserMapper;
 import life.bienao.springbootinit.mapper.SysUserRoleMapper;
 import life.bienao.springbootinit.service.AuthService;
+import life.bienao.springbootinit.service.SysMenuService;
 import life.bienao.springbootinit.util.JwtUtil;
 import life.bienao.springbootinit.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,25 +14,33 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    @Resource
+    @Autowired
     private SysUserMapper sysUserMapper;
 
-    @Resource
+    @Autowired
     private SysUserRoleMapper sysUserRoleMapper;
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    protected BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private SysPermissionService permissionService;
+
+    @Autowired
+    private SysMenuService menuService;
 
     @Override
     public JSONObject login(SysUser user) {
@@ -45,11 +51,17 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("登陆失败！");
         }
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
-        String userId = loginUser.getUser().getUserId().toString();
-        String jwt = JwtUtil.createJWT(userId);
+        Long userId = loginUser.getUser().getUserId();
+        String jwt = JwtUtil.createJWT(userId.toString());
         JSONObject result = new JSONObject();
         result.put("token", "Bearer " + jwt);
         Redis.loginUser.put("login:" + userId, loginUser);
+        result.put("user", loginUser);
+        //获取菜单表中menu_type为M、C的菜单记录。取得的集合是已经进行父子表递归过的
+        List<SysMenu> menus = menuService.selectMenuTreeByUserId(userId);
+        //构建前端所需要的路由表
+        List<RouterVo> routerVos = menuService.buildMenus(menus);
+        result.put("routers", routerVos);
         return result;
 
     }
@@ -66,16 +78,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void registerUser(LoginBody loginBody) {
+    public void registerUser(SysUser user) {
         //1、查询用户名是否存在
-        SysUser sysUser = sysUserMapper.loadUserByUsername(loginBody.getUsername());
+        SysUser sysUser = sysUserMapper.loadUserByUsername(user.getUserName());
         if (sysUser != null){
             throw new RuntimeException("用户名已存在，请重新输入！");
         }
         //2、注册用户
-        String username = loginBody.getUsername();
-        String password = loginBody.getPassword();
-        String bcryptPasswd = SecurityUtils.bCryptPasswordEncoder.encode(password);
+        String username = user.getUserName();
+        String password = user.getPassword();
+        String bcryptPasswd = bCryptPasswordEncoder.encode(password);
         SysUser registerUser = new SysUser(username, username, bcryptPasswd);
         if (sysUserMapper.insertUser(registerUser) > 0){
             //3、获取到刚刚自增的id
@@ -87,5 +99,18 @@ public class AuthServiceImpl implements AuthService {
         }else {
             throw new RuntimeException("注册失败！");
         }
+    }
+
+    @Override
+    public Map getInfo(){
+        SysUser user = SecurityUtils.getLoginUser().getUser();
+        // 角色集合
+        Set<String> roles = permissionService.getRolePermission(user);
+        // 权限集合
+        Set<String> permissions = permissionService.getMenuPermission(user);
+        Map<String,Object> result = new HashMap<>();
+        result.put("roles", roles);
+        result.put("permissions", permissions);
+        return result;
     }
 }

@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>life.bienao</groupId>
-    <artifactId>springboot-init</artifactId>
+    <artifactId>springboot-init2</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>springboot-init</name>
     <description>springboot-init</description>

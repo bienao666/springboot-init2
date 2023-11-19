@@ -12,7 +12,7 @@ import java.util.Set;
  *
  * @author ruoyi
  */
-public interface ISysRoleService
+public interface SysRoleService
 {
     /**
      * 根据条件分页查询角色数据
