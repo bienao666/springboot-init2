@@ -1,5 +1,5 @@
 server:
-  port: 8899
+  port: 4560
   servlet:
     context-path: / #请求路径，可以自定义
   tomcat:

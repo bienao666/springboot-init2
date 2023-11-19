@@ -1,1 +1,1 @@
-docker build -t springboot-init .
+docker build -t springboot-init2 .
