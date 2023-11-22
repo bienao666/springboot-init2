@@ -113,4 +113,16 @@ public class AuthServiceImpl implements AuthService {
         result.put("permissions", permissions);
         return result;
     }
+
+    @Override
+    public JSONObject getRouters() {
+        JSONObject result = new JSONObject();
+        SysUser user = SecurityUtils.getLoginUser().getUser();
+        //获取菜单表中menu_type为M、C的菜单记录。取得的集合是已经进行父子表递归过的
+        List<SysMenu> menus = menuService.selectMenuTreeByUserId(user.getUserId());
+        //构建前端所需要的路由表
+        List<RouterVo> routerVos = menuService.buildMenus(menus);
+        result.put("routers", routerVos);
+        return result;
+    }
 }

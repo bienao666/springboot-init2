@@ -56,4 +56,13 @@ public class AuthController {
     public Map getInfo(){
         return authService.getInfo();
     }
+
+    /**
+     * 获取用户的路由
+     * @return
+     */
+    @GetMapping("/getRouters")
+    public JSONObject getRouters(){
+        return authService.getRouters();
+    }
 }
