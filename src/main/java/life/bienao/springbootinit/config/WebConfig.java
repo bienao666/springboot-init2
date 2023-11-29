@@ -32,13 +32,12 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     /**
-     * 所有/view/路径都代理到index.html下
+     * 所有/路径都代理到index.html下
      * @param registry
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("forward:/index.html");
-        registry.addViewController("/view/**").setViewName("forward:/index.html");
     }
 
 
