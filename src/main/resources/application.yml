@@ -10,6 +10,48 @@ spring:
   datasource:
     url: jdbc:sqlite::resource:db/data.db
     driver-class-name: org.sqlite.JDBC
+    druid:
+      type: com.alibaba.druid.pool.DruidDataSource
+      # 初始化连接数量
+      initial-size: 5
+      # 最小线连接数量
+      min-idle: 5
+      # 最大连接数量
+      max-active: 20
+      # 获取连接时最大等待时间，单位毫秒
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60077
+      #销毁线程时检测当前连接的最后活动时间和当前时间差大于该值时，关闭当前连接
+      min-evictable-idle-time-millis: 300000
+      #用来检测连接是否有效的sql 必须是一个查询语句
+      validation-query: SELECT 1
+      test-while-idle: true
+      #申请连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为true
+      test-on-borrow: false
+      #归还连接时会执行validationQuery检测连接是否有效,开启会降低性能,默认为tru
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      # 配置监拉统计挡成的filters. stat: 监控统计、Log4j:日志记录、waLL: 防御sqL注入
+      filters: stat,wall,log4j2
+      use-global-data-source-stat: true
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000;serverTimezone=Asia/Shanghai
+      # 配置后台监控
+      stat-view-servlet:
+        # 是否开启访问
+        enabled: true
+        # 管理页面登陆的用户名
+        login-username: admin
+        # 管理页面登陆的密码
+        login-password: 123456
+        # 是否能够重置数据
+        reset-enable: false
+        url-pattern: /druid/*
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
   jackson:
       date-format: yyyy-MM-dd HH:mm:ss
       time-zone: GMT+8
@@ -19,12 +61,14 @@ mybatis:
   type-aliases-package: life.bienao.springboot.entity
   mapper-locations: classpath:mapper/*.xml
   configuration:
+    #打印日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #SQL中查出来的带下划线的字段，转换为驼峰标志,方便映射成java对象
+    map-underscore-to-camel-case: true
+    #二级缓存暂时关闭，等到有性能问题时再开启
+    cache-enabled: false
 
 logging:
   config: classpath:logback-spring.xml
-
-jwt:
-  header: Authorization
 
 

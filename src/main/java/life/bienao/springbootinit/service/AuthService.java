@@ -20,4 +20,6 @@ public interface AuthService {
     void registerUser(SysUser user);
 
     public Map getInfo();
+
+    JSONObject getRouters();
 }
