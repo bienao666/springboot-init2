@@ -36,10 +36,10 @@
                 LEFT JOIN sys_menu m ON rm.menu_id = m.menu_id
         WHERE
             ur.user_id = #{userid}
-          AND r.`status` = 0
-          AND m.`status` = 0
+          AND r.status = 0
+          AND m.status = 0
 --        避免perms查到空(因为menu表中type为m是菜单，它们的perms为空)
-          AND m.perms not null
+          AND m.perms is not null
           AND m.perms!=''
     </select>
 

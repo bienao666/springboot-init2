@@ -1,12 +1,16 @@
 package life.bienao.springbootinit.service.impl;
 
+import cn.hutool.core.util.RandomUtil;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import life.bienao.springbootinit.constant.Redis;
 import life.bienao.springbootinit.entity.*;
 import life.bienao.springbootinit.mapper.SysUserMapper;
 import life.bienao.springbootinit.mapper.SysUserRoleMapper;
 import life.bienao.springbootinit.service.AuthService;
+import life.bienao.springbootinit.service.MailService;
 import life.bienao.springbootinit.service.SysMenuService;
+import life.bienao.springbootinit.service.SysUserService;
 import life.bienao.springbootinit.util.JwtUtil;
 import life.bienao.springbootinit.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +45,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private SysMenuService menuService;
+
+    @Autowired
+    private MailService mailService;
+
+    @Autowired
+    private SysUserMapper userMapper;
 
     @Override
     public JSONObject login(SysUser user) {
@@ -124,5 +134,75 @@ public class AuthServiceImpl implements AuthService {
         List<RouterVo> routerVos = menuService.buildMenus(menus);
         result.put("routers", routerVos);
         return result;
+    }
+
+    @Override
+    public void emailCode(GetEmailCodeEntity entity) {
+        String email = entity.getEmail();
+        String username = email;
+        String emailCode = RandomUtil.randomNumbers(6);
+        EmailCodeEntity emailCodeEntity = new EmailCodeEntity(emailCode, username,email,1);
+        Redis.timedCache.put(RedisTransKey.setEmailKey(username), JSONObject.toJSONString(emailCodeEntity), 60 * 1000);
+        mailService.sendCodeMailMessage(email, emailCodeEntity.getEmailCode());
+    }
+
+    @Override
+    public void register(RegisterEntity entity) {
+        String username = entity.getUsername();
+        username = username.replaceAll(" ","");
+        String authCode = entity.getAuthCode();
+//        先检验一下验证码，对不对，邮箱有没有被更改
+        if(Redis.timedCache.get(RedisTransKey.getEmailKey(username)) != null){
+            String redisTransKey = Redis.timedCache.get(RedisTransKey.getEmailKey(username));
+            EmailCodeEntity emailCodeEntity = JSON.parseObject(redisTransKey, EmailCodeEntity.class);
+            if(username.equals(emailCodeEntity.getUsername())){
+                if(authCode.equals(emailCodeEntity.getEmailCode())){
+                    //开始封装用户并进行存储
+                    SysUser user = new SysUser();
+                    user.setUserName(username);
+                    user.setPassword(bCryptPasswordEncoder.encode(entity.getPassword()));
+                    user.setEmail(entity.getEmail());
+                    user.setNickName(entity.getNickName());
+                    user.setStatus("0");
+                    userMapper.insertUser(user);
+                    Redis.timedCache.remove(RedisTransKey.getEmailKey(username));
+                }else {
+                    throw new RuntimeException("邮箱验证码错误");
+                }
+            }else {
+                throw new RuntimeException("疑似恶意操作");
+            }
+        }else {
+            throw new RuntimeException("操作超时");
+        }
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordEntity entity) {
+        String email = entity.getEmail();
+        String username = email;
+        String authCode = entity.getAuthCode();
+//        先检验一下验证码，对不对，邮箱有没有被更改
+        if(Redis.timedCache.get(RedisTransKey.getEmailKey(username)) != null){
+            String redisTransKey = Redis.timedCache.get(RedisTransKey.getEmailKey(username));
+            EmailCodeEntity emailCodeEntity = JSON.parseObject(redisTransKey, EmailCodeEntity.class);
+            if(username.equals(emailCodeEntity.getUsername())){
+                if(authCode.equals(emailCodeEntity.getEmailCode())){
+                    //开始修改密码
+                    SysUser user = userMapper.loadUserByUsername(username);
+                    SysUser update = new SysUser();
+                    update.setUserId(user.getUserId());
+                    update.setPassword(bCryptPasswordEncoder.encode(entity.getNewPassword()));
+                    userMapper.updateSysUser(update);
+                    Redis.timedCache.remove(RedisTransKey.getEmailKey(username));
+                }else {
+                    throw new RuntimeException("邮箱验证码错误");
+                }
+            }else {
+                throw new RuntimeException("疑似恶意操作");
+            }
+        }else {
+            throw new RuntimeException("操作超时");
+        }
     }
 }
