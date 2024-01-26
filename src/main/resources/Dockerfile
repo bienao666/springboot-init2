@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM adoptopenjdk/openjdk8-openj9:ubi
 # 创建者
 MAINTAINER bolo.bienao.life
 WORKDIR /home

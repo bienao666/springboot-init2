@@ -1,8 +1,7 @@
 package life.bienao.springbootinit.service;
 
 import com.alibaba.fastjson.JSONObject;
-import life.bienao.springbootinit.entity.LoginBody;
-import life.bienao.springbootinit.entity.SysUser;
+import life.bienao.springbootinit.entity.*;
 
 import java.util.Map;
 
@@ -22,4 +21,10 @@ public interface AuthService {
     public Map getInfo();
 
     JSONObject getRouters();
+
+    void emailCode(GetEmailCodeEntity entity);
+
+    void register(RegisterEntity entity);
+
+    void resetPassword(ResetPasswordEntity entity);
 }

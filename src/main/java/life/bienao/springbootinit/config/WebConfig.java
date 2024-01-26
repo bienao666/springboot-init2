@@ -32,7 +32,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     /**
-     * 所有/view/路径都代理到index.html下
+     * 所有/路径都代理到index.html下
      * @param registry
      */
     @Override
