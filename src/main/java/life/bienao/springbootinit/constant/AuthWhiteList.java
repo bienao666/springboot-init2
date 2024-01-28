@@ -10,8 +10,15 @@ public class AuthWhiteList {
      */
     public static final String[] AUTH_WHITELIST = {
             // -- register url
-            "/member/addUser",
+            //注册登录
             "/auth/login",
+            "/auth/emailCode",
+            "/auth/register",
+            "/auth/resetPassword",
+
+            "/user/addUser",
+
+            // -- 前端页面
             "/init/**",
             "/assets/**",
             "/img/**",
