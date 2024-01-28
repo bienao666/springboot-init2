@@ -6,6 +6,20 @@ package life.bienao.springbootinit.constant;
  * @Description 常量
  */
 public class Constants {
+    /**
+     * UTF-8 字符集
+     */
+    public static final String UTF8 = "UTF-8";
+
+    /**
+     * http请求
+     */
+    public static final String HTTP = "http://";
+
+    /**
+     * https请求
+     */
+    public static final String HTTPS = "https://";
 
     /**
      * 令牌前缀
