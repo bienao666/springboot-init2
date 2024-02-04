@@ -64,8 +64,8 @@ INSERT INTO
     "sys_user"
     ("user_id", "user_name", "nick_name", "user_type", "email", "phonenumber", "sex", "avatar", "password", "status", "del_flag", "login_ip", "login_date", "create_by", "update_by", "remark", "real_name", "per_img")
 VALUES
-    (1, 'admin', 'admin', '00', '', '', '0', '', '$2a$10$i8QBTH0Xaj.PRKUIz7D0u.nHMcpl3NLfjfjWkQgwYiBZkL61CoD9S', '0', '0', '', NULL, 'admin', 'admin', NULL, '', ''),
-    (2, 'user', 'user', '00', '', '', '0', '', '$2a$10$c54Li/xoEeDc85FqRM0FFOqtmy1QPuqVXDt7JU0Jr.TCxqZ4qaQ92', '0', '0', '', NULL, 'admin', 'admin', NULL, '', '');
+    (1, 'admin', 'admin', 1, '', '', '0', '', '$2a$10$i8QBTH0Xaj.PRKUIz7D0u.nHMcpl3NLfjfjWkQgwYiBZkL61CoD9S', '0', '0', '', NULL, 'admin', 'admin', NULL, '', ''),
+    (2, 'user', 'user', 0, '', '', '0', '', '$2a$10$c54Li/xoEeDc85FqRM0FFOqtmy1QPuqVXDt7JU0Jr.TCxqZ4qaQ92', '0', '0', '', NULL, 'admin', 'admin', NULL, '', '');
 
 -- sys_user_role
 INSERT INTO

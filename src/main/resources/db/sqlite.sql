@@ -51,7 +51,7 @@ CREATE TABLE `sys_user`  (
                              `user_id` INTEGER PRIMARY KEY AUTOINCREMENT,
                              `user_name` varchar(30) NOT NULL,
                              `nick_name` varchar(30) NOT NULL,
-                             `user_type` varchar(2) NULL DEFAULT '00',
+                             `user_type` INTEGER NULL DEFAULT 0,
                              `email` varchar(50) NULL DEFAULT '',
                              `phonenumber` varchar(11) NULL DEFAULT '',
                              `sex` varchar(1) NULL DEFAULT '0',
