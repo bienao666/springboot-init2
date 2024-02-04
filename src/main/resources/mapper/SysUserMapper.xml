@@ -43,7 +43,7 @@
 <!--    </select>    -->
 
     <select id="loadUserByUsername" resultMap="SysUserResult">
-        select t.user_id, t.user_name, t.nick_name, t.email,
+        select t.user_id, t.user_name, t.nick_name, t.user_type ,t.email,
                t.avatar, t.phonenumber, t.password, t.sex,
                t.status, t.del_flag, t.login_ip, t.login_date,
                t.create_by, t.create_time, t.remark,
