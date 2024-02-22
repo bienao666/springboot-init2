@@ -1,5 +1,6 @@
 package life.bienao.springbootinit.controller;
 
+import life.bienao.springbootinit.annotation.Log;
 import life.bienao.springbootinit.entity.System;
 import life.bienao.springbootinit.entity.page.TableDataInfo;
 import life.bienao.springbootinit.service.SystemService;
@@ -23,6 +24,7 @@ public class SystemController extends BaseController{
     /**
      * 新增
      **/
+    @Log(title = "系统参数", businessType = "新增参数")
     @PostMapping("/insert")
     @PreAuthorize("@ss.hasPerm('system:insert')")
     public int insert(@Validated @RequestBody System system){
@@ -32,6 +34,7 @@ public class SystemController extends BaseController{
     /**
      * 刪除
      **/
+    @Log(title = "系统参数", businessType = "刪除参数")
     @DeleteMapping("/{id}")
     @PreAuthorize("@ss.hasPerm('system:delete')")
     public int delete(@PathVariable int id){
@@ -41,6 +44,7 @@ public class SystemController extends BaseController{
     /**
      * 更新
      **/
+    @Log(title = "系统参数", businessType = "更新参数")
     @PostMapping("/update")
     @PreAuthorize("@ss.hasPerm('system:update')")
     public int update(@Validated @RequestBody System system){
