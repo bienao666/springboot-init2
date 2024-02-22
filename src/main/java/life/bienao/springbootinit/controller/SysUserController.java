@@ -1,8 +1,8 @@
 package life.bienao.springbootinit.controller;
 
 import life.bienao.springbootinit.entity.*;
-import life.bienao.springbootinit.entity.page.CommonPage;
 import life.bienao.springbootinit.entity.page.PageUtils;
+import life.bienao.springbootinit.entity.page.TableDataInfo;
 import life.bienao.springbootinit.service.AuthService;
 import life.bienao.springbootinit.service.SysUserService;
 import life.bienao.springbootinit.util.SecurityUtils;
@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/member")
-public class SysUserController {
+public class SysUserController extends BaseController{
 
     @Autowired
     private AuthService authService;
@@ -36,10 +36,10 @@ public class SysUserController {
      */
     @GetMapping("/list")
     @PreAuthorize("@ss.hasPerm('member:list')")
-    public CommonPage list(MUserVo userVo) {
+    public TableDataInfo list(MUserVo userVo) {
         PageUtils.startPage();
         List<MUserVo> list = sysUserService.selectSysUserList(userVo);
-        return CommonPage.restPage(list);
+        return getDataTable(list);
     }
 
     /**

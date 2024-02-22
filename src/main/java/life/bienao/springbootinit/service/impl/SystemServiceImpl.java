@@ -3,7 +3,7 @@ package life.bienao.springbootinit.service.impl;
 import com.github.pagehelper.PageHelper;
 import life.bienao.springbootinit.constant.Systems;
 import life.bienao.springbootinit.entity.System;
-import life.bienao.springbootinit.entity.page.CommonPage;
+import life.bienao.springbootinit.entity.page.TableDataInfo;
 import life.bienao.springbootinit.mapper.SystemMapper;
 import life.bienao.springbootinit.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,10 +50,8 @@ public class SystemServiceImpl implements SystemService {
 
 
     @Override
-    public CommonPage<System> pageList(int offset, int pagesize) {
-        PageHelper.startPage(offset, pagesize);
-        List<System> systems = systemMapper.loadAll();
-        return CommonPage.restPage(systems);
+    public List<System> pageList() {
+        return systemMapper.loadAll();
     }
 
 }

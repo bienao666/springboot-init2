@@ -1,20 +1,21 @@
 package life.bienao.springbootinit.controller;
 
-import life.bienao.springbootinit.entity.page.CommonPage;
 import life.bienao.springbootinit.entity.System;
+import life.bienao.springbootinit.entity.page.TableDataInfo;
 import life.bienao.springbootinit.service.SystemService;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 系统参数
  */
 @RestController
 @RequestMapping(value = "/system")
-public class SystemController {
+public class SystemController extends BaseController{
 
     @Autowired
     private SystemService systemService;
@@ -60,9 +61,9 @@ public class SystemController {
      **/
     @RequestMapping("/pageList")
     @PreAuthorize("@ss.hasPerm('system:pageList')")
-    public CommonPage<System> pageList(@RequestParam(required = false, defaultValue = "1") int offset,
-                                       @RequestParam(required = false, defaultValue = "10") int pagesize) {
-        return systemService.pageList(offset, pagesize);
+    public TableDataInfo pageList() {
+        List<System> systems = systemService.pageList();
+        return getDataTable(systems);
     }
 
 }

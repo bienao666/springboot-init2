@@ -49,7 +49,7 @@ VALUES
     (604, '系统参数查询详情', 6, 4, '/system/load', NULL, 'load', 1, 0, 'F', '0', '0', 'system:load', '#', 'admin', 'admin', '系统参数查询详情'),
     (605, '系统参数分页查询', 6, 5, '/system/pageList', NULL, 'pageList', 1, 0, 'F', '0', '0', 'system:pageList', '#', 'admin', 'admin', '系统参数分页查询'),
 
-    (1000, '自增开始', 0, 3, '', NULL, '', 1, 0, '', '1', '0', '', '#', 'admin', 'admin', '自增开始');
+    (10000, '自增开始', 0, 3, '', NULL, '', 1, 0, '', '1', '0', '', '#', 'admin', 'admin', '自增开始');
 
 -- sys_role
 INSERT INTO

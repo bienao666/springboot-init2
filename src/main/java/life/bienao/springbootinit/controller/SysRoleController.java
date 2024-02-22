@@ -5,8 +5,8 @@ import life.bienao.springbootinit.entity.LoginUser;
 import life.bienao.springbootinit.entity.SysRole;
 import life.bienao.springbootinit.entity.SysUser;
 import life.bienao.springbootinit.entity.SysUserRole;
-import life.bienao.springbootinit.entity.page.CommonPage;
 import life.bienao.springbootinit.entity.page.PageUtils;
+import life.bienao.springbootinit.entity.page.TableDataInfo;
 import life.bienao.springbootinit.service.SysRoleService;
 import life.bienao.springbootinit.service.SysUserService;
 import life.bienao.springbootinit.util.SecurityUtils;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/role")
-public class SysRoleController {
+public class SysRoleController extends BaseController {
 
     @Autowired
     private SysRoleService roleService;
@@ -41,10 +41,10 @@ public class SysRoleController {
      */
     @GetMapping("/list")
     @PreAuthorize("@ss.hasPerm('role:list')")
-    public CommonPage list(SysRole role) {
+    public TableDataInfo list(SysRole role) {
         PageUtils.startPage();
         List<SysRole> sysRoles = roleService.selectRoleList(role);
-        return CommonPage.restPage(sysRoles);
+        return getDataTable(sysRoles);
     }
 
     /**
@@ -118,10 +118,10 @@ public class SysRoleController {
      */
     @GetMapping("/allocatedList")
     @PreAuthorize("@ss.hasPerm('role:allocatedList')")
-    public CommonPage allocatedList(SysUser user){
+    public TableDataInfo allocatedList(SysUser user){
         PageUtils.startPage();
         List<SysUser> list = sysUserService.selectAllocatedList(user);
-        return CommonPage.restPage(list);
+        return getDataTable(list);
     }
 
     /**
@@ -129,10 +129,10 @@ public class SysRoleController {
      */
     @GetMapping("/unallocatedList")
     @PreAuthorize("@ss.hasPerm('role:unallocatedList')")
-    public CommonPage unallocatedList(SysUser user) {
+    public TableDataInfo unallocatedList(SysUser user) {
         PageUtils.startPage();
         List<SysUser> list = sysUserService.selectUnallocatedList(user);
-        return CommonPage.restPage(list);
+        return getDataTable(list);
     }
 
     /**

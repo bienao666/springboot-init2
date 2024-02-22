@@ -30,4 +30,14 @@ public class PageUtils {
         }
     }
 
+
+
+    /**
+     * 清理分页的线程变量
+     */
+    public static void clearPage()
+    {
+        PageHelper.clearPage();
+    }
+
 }

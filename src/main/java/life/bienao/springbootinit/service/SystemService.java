@@ -1,8 +1,10 @@
 package life.bienao.springbootinit.service;
 
 
-import life.bienao.springbootinit.entity.page.CommonPage;
 import life.bienao.springbootinit.entity.System;
+import life.bienao.springbootinit.entity.page.TableDataInfo;
+
+import java.util.List;
 
 /**
  * @description system
@@ -32,6 +34,6 @@ public interface SystemService {
     /**
      * 分页查询
      */
-    public CommonPage<System> pageList(int offset, int pagesize);
+    public List<System> pageList();
 
 }
