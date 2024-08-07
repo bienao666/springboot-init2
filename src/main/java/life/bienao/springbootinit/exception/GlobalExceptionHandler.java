@@ -137,4 +137,16 @@ public class GlobalExceptionHandler {
         log.error("请求地址'{}',发生数据库异常.", requestURI, e);
         return Result.error( "数据库异常！");
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    public Result handleValidationExceptions(MethodArgumentNotValidException ex) {
+        StringBuilder sb = new StringBuilder();
+        ex.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((org.springframework.validation.FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            sb.append(fieldName).append(":").append(errorMessage).append(";");
+        });
+        return Result.error(sb.toString());
+    }
 }
